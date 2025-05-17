@@ -78,10 +78,12 @@ function setupToolbarVisibility() {
 		
 		if (isPinned) {
 			toolbar.classList.remove('hidden');
+			showMessage('Toolbar locked');
 		} else {
 			toolbarTimeout = setTimeout(() => {
 				toolbar.classList.add('hidden');
 			}, HIDE_DELAY);
+			showMessage('Toolbar unlocked');
 		}
 	});
 }
@@ -187,6 +189,13 @@ function handleKeyPress(event) {
 		case 'F11':
 			event.preventDefault(); // Prevent browser's default F11 behavior
 			toggleFullscreen();
+			break;
+		case 'l':
+			if (event.altKey) {
+				event.preventDefault();
+				const toggleBtn = document.getElementById('toolbarToggleBtn');
+				toggleBtn.click(); // Trigger the click event to toggle lock state
+			}
 			break;
 	}
 }

@@ -1,5 +1,13 @@
 # DualReader - Eagle Extension
 
+<div align="center">
+  <img src="UI.png" alt="DualReader UI" width="800"/>
+  <br>
+  <em>Sample from The Multiversity: Mastermen #1 (DC Comics, February 18, 2015)</em>
+</div>
+<br>
+
+
 A comic/manga reading extension for Eagle that provides a side-by-side reading experience with support for both left-to-right and right-to-left reading modes.
 
 ## Features
@@ -13,6 +21,7 @@ A comic/manga reading extension for Eagle that provides a side-by-side reading e
 - **Keyboard Shortcuts**:
   - Left/Right Arrow Keys: Navigate between pages
   - F11: Toggle fullscreen mode
+  - ALT + L: Toggles toolbar pinning
 - **Click Navigation**:
   - Click left/right edges of the screen to navigate
   - Navigation direction automatically adjusts based on reading mode
