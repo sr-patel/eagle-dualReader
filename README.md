@@ -57,7 +57,7 @@ A comic/manga reading extension for Eagle that provides a side-by-side reading e
 ## Usage
 
 1. Select the manga images you want to read in Eagle
-2. Open the Mangaread extension
+2. Open the DualReader extension
 3. Use the toolbar to:
    - Toggle between normal and manga reading modes
    - Enable/disable title page
