@@ -21,6 +21,7 @@ function setupEventListeners() {
 	document.getElementById('mangaModeToggle').addEventListener('change', handleMangaModeToggle);
 	document.getElementById('pageJumpInput').addEventListener('change', handlePageJump);
 	document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+	document.getElementById('toolbarToggleBtn').addEventListener('click', toggleToolbar);
 	
 	// Add click handlers for navigation areas
 	document.getElementById('leftNavArea').addEventListener('click', showPreviousPanels);
@@ -36,7 +37,11 @@ function setupEventListeners() {
 // Setup toolbar visibility handling
 function setupToolbarVisibility() {
 	const toolbar = document.querySelector('.toolbar');
+	const toggleBtn = document.getElementById('toolbarToggleBtn');
 	let toolbarTimeout;
+	let isPinned = false;
+	const HIDE_DELAY = 3000; // 3 seconds delay
+	const BUFFER_ZONE = 100; // 100px buffer zone
 
 	// Create toolbar trigger area
 	const trigger = document.createElement('div');
@@ -45,24 +50,38 @@ function setupToolbarVisibility() {
 
 	// Show toolbar on mouse move near top
 	document.addEventListener('mousemove', (e) => {
-		if (!document.fullscreenElement) return;
-
-		if (e.clientY <= 60) {
+		if (isPinned) return; // Don't hide if pinned
+		
+		if (e.clientY <= BUFFER_ZONE) {
 			toolbar.classList.remove('hidden');
 			clearTimeout(toolbarTimeout);
 		} else {
 			toolbarTimeout = setTimeout(() => {
 				toolbar.classList.add('hidden');
-			}, 1000);
+			}, HIDE_DELAY);
 		}
 	});
 
 	// Hide toolbar when leaving trigger area
 	trigger.addEventListener('mouseleave', () => {
-		if (document.fullscreenElement) {
+		if (isPinned) return; // Don't hide if pinned
+		
+		toolbarTimeout = setTimeout(() => {
+			toolbar.classList.add('hidden');
+		}, HIDE_DELAY);
+	});
+
+	// Toggle pin state
+	toggleBtn.addEventListener('click', () => {
+		isPinned = !isPinned;
+		toggleBtn.classList.toggle('locked');
+		
+		if (isPinned) {
+			toolbar.classList.remove('hidden');
+		} else {
 			toolbarTimeout = setTimeout(() => {
 				toolbar.classList.add('hidden');
-			}, 1000);
+			}, HIDE_DELAY);
 		}
 	});
 }
@@ -129,6 +148,8 @@ function toggleFullscreen() {
 	const fullscreenIcon = fullscreenBtn.querySelector('svg');
 	const fullscreenText = fullscreenBtn.querySelector('span');
 	const toolbar = document.querySelector('.toolbar');
+	const toggleBtn = document.getElementById('toolbarToggleBtn');
+	const isPinned = toggleBtn.classList.contains('locked');
 	
 	if (!document.fullscreenElement) {
 		// Enter fullscreen
@@ -137,13 +158,17 @@ function toggleFullscreen() {
 		});
 		fullscreenIcon.innerHTML = '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>';
 		fullscreenText.textContent = 'Exit Fullscreen';
-		toolbar.classList.add('hidden');
+		if (!isPinned) {
+			toolbar.classList.add('hidden');
+		}
 	} else {
 		// Exit fullscreen
 		document.exitFullscreen();
 		fullscreenIcon.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
 		fullscreenText.textContent = 'Fullscreen';
-		toolbar.classList.remove('hidden');
+		if (!isPinned) {
+			toolbar.classList.remove('hidden');
+		}
 	}
 }
 
@@ -527,6 +552,17 @@ async function showNextPanels() {
 	} else {
 		console.log('Already at the end');
 		showMessage('Already at the end');
+	}
+}
+
+// Toggle toolbar visibility
+function toggleToolbar() {
+	const toolbar = document.querySelector('.toolbar');
+	const toggleBtn = document.getElementById('toolbarToggleBtn');
+	const isPinned = toggleBtn.classList.contains('locked');
+	
+	if (!isPinned) {
+		toolbar.classList.toggle('hidden');
 	}
 }
 

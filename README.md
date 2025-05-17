@@ -24,6 +24,7 @@ A comic/manga reading extension for Eagle that provides a side-by-side reading e
 - **Fullscreen Mode**:
   - Press F11 or click the fullscreen button
   - Toolbar automatically hides and shows on hover
+  - Lock toggle allows for toolbar pinning
   - Semi-transparent toolbar with blur effect
 - **Responsive Layout**:
   - Images automatically scale to fit the screen
@@ -66,10 +67,6 @@ A comic/manga reading extension for Eagle that provides a side-by-side reading e
 - The page jump input shows your current position and total pages
 - Manga mode automatically adjusts navigation direction
 - Single pages are displayed in the correct panel based on reading mode
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## License
 

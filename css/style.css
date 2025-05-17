@@ -18,6 +18,65 @@ body {
     display: flex;
     gap: 10px;
     justify-content: center;
+    transition: transform 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.toolbar.hidden {
+    transform: translateY(-100%);
+}
+
+.toolbar-trigger {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    z-index: 999;
+    cursor: pointer;
+}
+
+.toolbar-toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, color 0.3s ease;
+    z-index: 1001;
+}
+
+.toolbar-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.toolbar-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+.toolbar-toggle-btn.locked {
+    color: #4CAF50;
+}
+
+.toolbar-toggle-btn.locked svg {
+    transform: scale(1.1);
+}
+
+.toolbar.hidden .toolbar-toggle-btn {
+    transform: rotate(180deg);
 }
 
 .nav-btn {
