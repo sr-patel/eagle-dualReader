@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .toolbar {
+            padding: 10px;
+            background-color: rgba(42, 42, 42, 0.9);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .toolbar.hidden {
+            transform: translateY(-100%);
+        }
+        
+        .toolbar-trigger {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            z-index: 999;
+            cursor: pointer;
+        }
+        
+        .panels-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            gap: 0;
+            position: relative;
+            margin-top: 0;
+            transition: margin-top 0.3s ease;
+        }
+        
+        .panels-container.toolbar-visible {
+            margin-top: 60px;
+        }
+        
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #1a1a1a;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .panel-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        #rightPanel .panel-content {
+            justify-content: flex-start;
+        }
+        
+        .nav-area {
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .nav-area:hover {
+            opacity: 0.1;
+            background-color: white;
+        }
+
+        .nav-area.left {
+            left: 0;
+        }
+
+        .nav-area.right {
+            right: 0;
+        }
+        
+        .nav-btn {
+            padding: 8px 16px;
+            background-color: #3a3a3a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .nav-btn:hover {
+            background-color: #4a4a4a;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #3a3a3a;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        .fullscreen-btn {
+            padding: 8px 16px;
+            background-color: #3a3a3a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .fullscreen-btn:hover {
+            background-color: #4a4a4a;
+        }
+
+        .fullscreen-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 10px;
+            padding: 4px 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .left-page-number {
+            right: 10px;
+        }
+
+        .right-page-number {
+            left: 10px;
+        }
+
+        .page-jump {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .page-jump input {
+            width: 60px;
+            padding: 4px 8px;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            color: white;
+            text-align: center;
+        }
+
+        .page-jump input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .page-jump .total {
+            color: #888;
+            font-size: 0.9em;
+        }
+    </style>
+    <script type="text/javascript" src="js/plugin.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="toolbar">
+            <button id="prevBtn" class="nav-btn">Previous</button>
+            <button id="nextBtn" class="nav-btn">Next</button>
+            <div class="toggle-container">
+                <span>Title Page</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="titlePageToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-container">
+                <span>Manga Mode</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="mangaModeToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="page-jump">
+                <span>Page</span>
+                <input type="number" id="pageJumpInput" min="1" step="1">
+                <span class="total">of <span id="totalPages">0</span></span>
+            </div>
+            <button id="fullscreenBtn" class="fullscreen-btn">
+                <svg viewBox="0 0 24 24">
+                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                </svg>
+                <span>Fullscreen</span>
+            </button>
+        </div>
+        <div class="panels-container">
+            <div class="nav-area left" id="leftNavArea"></div>
+            <div id="leftPanel" class="panel">
+                <div class="panel-content">
+                    <div class="page-number left-page-number"></div>
+                </div>
+            </div>
+            <div id="rightPanel" class="panel">
+                <div class="panel-content">
+                    <div class="page-number right-page-number"></div>
+                </div>
+            </div>
+            <div class="nav-area right" id="rightNavArea"></div>
+        </div>
+    </div>
+</body>
+</html>
