@@ -3,9 +3,9 @@
     "version": "1.0.0",
     "platform": "all",
     "arch": "all",
-    "name": "Mangaread",
+    "name": "DualReader",
     "logo": "/logo.png",
-    "keywords": ["manga", "reader", "side-by-side"],
+    "keywords": ["comic", "manga", "reader", "side-by-side"],
     "devTools": false,
     "main": {
         "url": "index.html",
